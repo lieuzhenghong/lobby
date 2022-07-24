@@ -62,16 +62,18 @@ remote func create_message(contents: String):
 	)
 	print("Message content: %s" % message._to_string())
 	
-	"""
+	
 	chat_log.push_back(message._to_string())
 	print("New chat log (length %s)" % chat_log.size())
 	var first_message: Message = chat_log[0]
 	print(first_message._to_string())
 	pprint(chat_log)
-	"""
-	chat_log.push_back("Message")
+	
+	
+	# chat_log.push_back("Message")
 	
 func pprint(chat_log):
+	"""
 	var result = ""
 	for i in range(chat_log.size()):
 		result += str(i)
@@ -84,7 +86,6 @@ func pprint(chat_log):
 		result += "\n"
 	print(result)
 	return(result)
-	"""
 
 class Message:
 	var sender
@@ -95,9 +96,9 @@ class Message:
 		self.time = OS.get_time()
 		self.contents = contents
 	func _to_string() -> String:
-		return "hello"
+		# return "hello"
 		#return "%s: %s" % [self.sender, self.contents]
-		# return ("%s [%s:%s:%s]: %s" % sender % time.hour % time.minute % time.second % contents)
+		return ("%s [%s:%s:%s]: %s" % sender % time.hour % time.minute % time.second % contents)
 		
 puppetsync func _update_chat_log(chat_log):
 	puppet_chat_log = chat_log
