@@ -58,10 +58,10 @@ remote func create_message(contents: String):
 	print("create_message received. Message: %s" % contents)
 	var id = get_tree().get_rpc_sender_id()
 	print("New message from ID %s" % id)
-	chat_log.push_back(Message.new(
-		player_info[id].name,
-		contents
-	))
+	chat_log.push_back({
+		"sender": player_info[id].name,
+		"contents": contents
+	})
 	print("New chat log (length %s)" % chat_log.size())
 	
 func pprint(chatlog):
@@ -80,10 +80,11 @@ class Message:
 		# return "hello"
 		return "%s: %s" % [self.sender, self.contents]
 		
-remote func _update_chat_log(chatlog):
+remote func _update_chat_log(chat_log):
+	print(chat_log)
 	# print("Updating chat log: %s" % pprint(chat_log))
 	# puppet_chat_log = chat_log
-	puppet_chat_log = chatlog
+	puppet_chat_log = chat_log
 
 func _on_SendMessageButton_pressed():
 	var my_id = get_tree().get_network_unique_id()
@@ -96,4 +97,4 @@ func _process(_delta):
 		# print(get_tree().multiplayer.is_object_decoding_allowed()) # True
 		chat_log = puppet_chat_log
 		if $ChatRoom/ChatDisplay != null:
-			$ChatRoom/ChatDisplay.text = pprint(chat_log)
+			$ChatRoom/ChatDisplay.text = print(chat_log)
