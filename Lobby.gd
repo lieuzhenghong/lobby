@@ -59,7 +59,7 @@ remote func create_message(contents: String):
 		player_info[id].name,
 		contents
 	)
-	chat_log.push_back(message)
+	chat_log.push_back(message.to_string())
 	return message	
 
 class Message:
@@ -81,7 +81,7 @@ func _on_SendMessageButton_pressed():
 	rpc_id(1, "create_message", $ChatRoom/MessagePreview.text)
 	
 func _update(_delta):
-	if is_network_master():
+	if get_tree().is_network_server():
 		rpc("_update_chat_log", chat_log)
 	else:
 		chat_log = puppet_chat_log
