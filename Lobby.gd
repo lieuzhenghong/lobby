@@ -50,9 +50,10 @@ remote func register_player(info):
 	# Store the info
 	player_info[id] = info
 	# Call function to update lobby UI here
-	print("Player ID %s info updated" % id)
+	print("Player ID %s name %s info updated" % id % name)
 	
 remote func create_message(contents: String):
+	print("create_message received %s" % contents)
 	var id = get_tree().get_rpc_sender_id()
 	print("New message from %s" % id)
 	var message = Message.new(
