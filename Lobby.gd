@@ -66,6 +66,8 @@ class Message:
 		sender = sender
 		time = OS.get_time()
 		contents = contents
+	func _to_string():
+		return ("%s [%s]: %s" % sender % time % contents)
 		
 puppet func _update_chat_log(chat_log):
 	puppet_chat_log = chat_log
