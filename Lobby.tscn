@@ -11,6 +11,14 @@ margin_right = 1080.0
 margin_bottom = 1920.0
 color = Color( 0.0784314, 0.384314, 0.298039, 1 )
 
+[node name="NameLabel" type="Label" parent="ChatRoom"]
+margin_left = 6.0
+margin_top = 1191.0
+margin_right = 444.0
+margin_bottom = 1251.0
+custom_fonts/font = ExtResource( 2 )
+text = "Name: "
+
 [node name="ChatDisplay" type="RichTextLabel" parent="ChatRoom"]
 margin_left = -3.0
 margin_top = 6.0
@@ -19,6 +27,14 @@ margin_bottom = 1362.0
 custom_fonts/normal_font = ExtResource( 2 )
 text = "=== Chat Log ==="
 
+[node name="ChangeNameInput" type="TextEdit" parent="ChatRoom"]
+margin_left = 4.0
+margin_top = 1261.0
+margin_right = 431.0
+margin_bottom = 1350.0
+custom_fonts/font = ExtResource( 2 )
+text = "Change name..."
+
 [node name="MessagePreview" type="TextEdit" parent="ChatRoom"]
 margin_left = -3.0
 margin_top = 1362.0
@@ -26,6 +42,15 @@ margin_right = 1073.0
 margin_bottom = 1699.0
 custom_fonts/font = ExtResource( 2 )
 text = "Type here..."
+show_line_numbers = true
+
+[node name="ChangeNameButton" type="Button" parent="ChatRoom"]
+margin_left = 703.0
+margin_top = 1236.0
+margin_right = 1065.0
+margin_bottom = 1344.0
+custom_fonts/font = ExtResource( 2 )
+text = "Change name"
 
 [node name="SendMessageButton" type="Button" parent="ChatRoom"]
 anchor_top = 1.0
@@ -35,4 +60,5 @@ margin_top = -213.0
 custom_fonts/font = ExtResource( 2 )
 text = "Send"
 
+[connection signal="pressed" from="ChatRoom/ChangeNameButton" to="." method="_on_ChangeNameButton_pressed"]
 [connection signal="pressed" from="ChatRoom/SendMessageButton" to="." method="_on_SendMessageButton_pressed"]

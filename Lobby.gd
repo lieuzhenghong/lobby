@@ -25,7 +25,9 @@ func _ready():
 # Player info, associate ID to data
 var player_info = {}
 # Info we send to other players
-var my_info = { name = "Johnson Magenta", favorite_color = Color8(255, 0, 255) }
+var random_name = "Guest_%s" % [randi() % 10000]
+var random_color = Color(rand_range(0,1),rand_range(0,1),rand_range(0,1),1)
+var my_info = { name = random_name, color = random_color}
 var chat_log = []
 var puppet_chat_log = []
 
@@ -89,10 +91,7 @@ class Message:
 		self.time.second, 
 		self.contents]
 		
-remote func _update_chat_log(chat_log):
-	# print(chat_log)
-	# print("Updating chat log: %s" % pprint(chat_log))
-	# puppet_chat_log = chat_log
+puppet func _update_chat_log(chat_log):
 	puppet_chat_log = chat_log
 
 func _on_SendMessageButton_pressed():
@@ -106,4 +105,10 @@ func _process(_delta):
 		# print(get_tree().multiplayer.is_object_decoding_allowed()) # True
 		chat_log = puppet_chat_log
 		if $ChatRoom/ChatDisplay != null:
-				$ChatRoom/ChatDisplay.text = pprint(chat_log)
+			$ChatRoom/ChatDisplay.text = pprint(chat_log)
+		if $ChatRoom/NameLabel != null:
+			$ChatRoom/NameLabel.text = my_info.name
+
+func _on_ChangeNameButton_pressed():
+	my_info.name = $ChatRoom/ChangeNameInput.text
+	rpc_id(1, "register_player", my_info)
