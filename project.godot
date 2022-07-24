@@ -11,11 +11,19 @@ config_version=4
 [application]
 
 config/name="Lobby"
+run/main_scene="res://Lobby.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Lobby="*res://Lobby.gd"
+
+[display]
+
+window/size/width=1080
+window/size/height=1920
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
 
 [physics]
 
