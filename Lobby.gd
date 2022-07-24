@@ -83,7 +83,8 @@ class Message:
 		time = OS.get_time()
 		contents = contents
 	func _to_string():
-		return ("%s [%s:%s:%s]: %s" % sender % time.hour % time.minute % time.second % contents)
+		return ("%s: %s" % sender % contents)
+		# return ("%s [%s:%s:%s]: %s" % sender % time.hour % time.minute % time.second % contents)
 		
 puppet func _update_chat_log(chat_log):
 	puppet_chat_log = chat_log
@@ -92,10 +93,10 @@ func _on_SendMessageButton_pressed():
 	var my_id = get_tree().get_network_unique_id()
 	rpc_id(1, "create_message", $ChatRoom/MessagePreview.text)
 	
-func _update(_delta):
+func _process(_delta):
 	if get_tree().is_network_server():
 		rpc("_update_chat_log", chat_log)
 	else:
 		chat_log = puppet_chat_log
-		# $ChatRoom/ChatDisplay.text = pprint(chat_log)
-		$ChatRoom/ChatDisplay.text += "NEW MESSAGE"
+		if $ChatRoom/ChatDisplay != null:
+			$ChatRoom/ChatDisplay.text = pprint(chat_log)
