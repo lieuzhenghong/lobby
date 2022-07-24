@@ -12,6 +12,7 @@ func _ready():
 		peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	else:
 		peer.create_client(SERVER_IP, SERVER_PORT)
+		
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
@@ -28,6 +29,7 @@ var puppet_chat_log = []
 
 func _player_connected(id):
 	# Called on both clients and server when a peer connects. Send my info to it.
+	print("New player connected %s" % id)
 	rpc_id(id, "register_player", my_info)
 
 func _player_disconnected(id):
@@ -48,9 +50,11 @@ remote func register_player(info):
 	# Store the info
 	player_info[id] = info
 	# Call function to update lobby UI here
+	print("Player ID %s info updated" % id)
 	
 remote func create_message(contents: String):
 	var id = get_tree().get_rpc_sender_id()
+	print("New message from %s" % id)
 	var message = Message.new(
 		player_info[id].name,
 		contents
@@ -74,7 +78,7 @@ puppet func _update_chat_log(chat_log):
 
 func _on_SendMessageButton_pressed():
 	var my_id = get_tree().get_network_unique_id()
-	rpc_id(my_id, "create_message", $ChatRoom/MessagePreview.text)
+	rpc_id(1, "create_message", $ChatRoom/MessagePreview.text)
 	
 func _update(_delta):
 	if is_network_master():
