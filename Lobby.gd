@@ -59,8 +59,8 @@ remote func create_message(contents: String):
 		player_info[id].name,
 		contents
 	)
-	print("Message content: %s" % message.to_string())
-	chat_log.push_back(message.to_string())
+	print("Message content: %s" % message._to_string())
+	chat_log.push_back(message._to_string())
 	print("New chat log:")
 	pprint(chat_log)
 	return message	
