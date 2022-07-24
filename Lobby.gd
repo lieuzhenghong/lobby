@@ -98,7 +98,7 @@ class Message:
 		# return "%s: %s" % [self.sender, self.contents]
 		
 puppetsync func _update_chat_log(chat_log):
-	puppet_chat_log = chat_log
+	puppet_chat_log = chat_log.duplicate(true)
 
 func _on_SendMessageButton_pressed():
 	var my_id = get_tree().get_network_unique_id()
@@ -108,6 +108,6 @@ func _process(_delta):
 	if get_tree().is_network_server():
 		rpc("_update_chat_log", chat_log)
 	else:
-		chat_log = puppet_chat_log
+		chat_log = puppet_chat_log.duplicate(true)
 		if $ChatRoom/ChatDisplay != null:
 			$ChatRoom/ChatDisplay.text = pprint(chat_log)
