@@ -11,8 +11,10 @@ func _ready():
 	if OS.has_feature("Server") or "--server" in OS.get_cmdline_args():
 		peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	else:
+		print("I am not a server")
 		peer.create_client(SERVER_IP, SERVER_PORT)
-		
+		get_tree().multiplayer.set_allow_object_decoding(true)
+
 	get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
@@ -56,49 +58,32 @@ remote func create_message(contents: String):
 	print("create_message received. Message: %s" % contents)
 	var id = get_tree().get_rpc_sender_id()
 	print("New message from ID %s" % id)
-	# var message = Message.new(
-	# 	player_info[id].name,
-	# 	contents
-	# )
-	# print("Message content: %s" % message._to_string())
-	# chat_log.push_back(message)
 	chat_log.push_back(Message.new(
 		player_info[id].name,
 		contents
 	))
-	# chat_log.push_back(message._to_string())
-	# chat_log.push_back("message")
 	print("New chat log (length %s)" % chat_log.size())
 	
-func pprint(chat_log):
+func pprint(chatlog):
 	var result = ""
-	for i in range(chat_log.size()):
-		result += chat_log[i]._to_string()
-		# result += chat_log[i]
+	for i in range(chatlog.size()):
+		result += chatlog[i]._to_string()
 		result += "\n"
 	return result
-	"""
-	var result = ""
-	for message in chat_log:
-		result += message._to_string()
-		result += "\n"
-	return(result)
-	"""
 
 class Message:
-	var sender
-	var time
-	var contents
 	func _init(sender, contents):
 		self.sender = sender
 		self.time = OS.get_time()
 		self.contents = contents
 	func _to_string() -> String:
-		return "hello"
-		# return "%s: %s" % [self.sender, self.contents]
+		# return "hello"
+		return "%s: %s" % [self.sender, self.contents]
 		
-puppetsync func _update_chat_log(chat_log):
-	puppet_chat_log = chat_log.duplicate(true)
+remote func _update_chat_log(chatlog):
+	# print("Updating chat log: %s" % pprint(chat_log))
+	# puppet_chat_log = chat_log
+	puppet_chat_log = chatlog
 
 func _on_SendMessageButton_pressed():
 	var my_id = get_tree().get_network_unique_id()
@@ -108,6 +93,7 @@ func _process(_delta):
 	if get_tree().is_network_server():
 		rpc("_update_chat_log", chat_log)
 	else:
-		chat_log = puppet_chat_log.duplicate(true)
+		# print(get_tree().multiplayer.is_object_decoding_allowed()) # True
+		chat_log = puppet_chat_log
 		if $ChatRoom/ChatDisplay != null:
 			$ChatRoom/ChatDisplay.text = pprint(chat_log)
