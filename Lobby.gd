@@ -50,7 +50,7 @@ remote func register_player(info):
 	# Store the info
 	player_info[id] = info
 	# Call function to update lobby UI here
-	print("Player ID %s name %s info updated" % id % player_info[id].name)
+	print("Player ID %s name %s info updated" % [id, player_info[id].name])
 	
 remote func create_message(contents: String):
 	print("create_message received %s" % contents)
