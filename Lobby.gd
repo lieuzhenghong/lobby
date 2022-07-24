@@ -70,11 +70,18 @@ remote func create_message(contents: String):
 	
 func pprint(chat_log):
 	var result = ""
+	for i in range(chat_log.size()):
+		result += str(i)
+	return result
+	
+	"""
+	var result = ""
 	for message in chat_log:
 		result += message._to_string()
 		result += "\n"
 	print(result)
 	return(result)
+	"""
 
 class Message:
 	var sender

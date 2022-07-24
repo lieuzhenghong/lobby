@@ -14,10 +14,6 @@ config/name="Lobby"
 run/main_scene="res://Lobby.tscn"
 config/icon="res://icon.png"
 
-[autoload]
-
-Lobby="*res://Lobby.gd"
-
 [display]
 
 window/size/width=1080
