@@ -79,11 +79,11 @@ class Message:
 	var time
 	var contents
 	func _init(sender, contents):
-		sender = sender
-		time = OS.get_time()
-		contents = contents
+		self.sender = sender
+		self.time = OS.get_time()
+		self.contents = contents
 	func _to_string() -> String:
-		return "%s: %s" % [sender, contents]
+		return "%s: %s" % [self.sender, self.contents]
 		# return ("%s [%s:%s:%s]: %s" % sender % time.hour % time.minute % time.second % contents)
 		
 puppet func _update_chat_log(chat_log):
