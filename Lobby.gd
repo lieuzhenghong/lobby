@@ -60,14 +60,19 @@ remote func create_message(contents: String):
 	print("New message from ID %s" % id)
 	chat_log.push_back({
 		"sender": player_info[id].name,
+		"time": OS.get_time(),
 		"contents": contents
 	})
 	print("New chat log (length %s)" % chat_log.size())
 	
 func pprint(chatlog):
 	var result = ""
-	for i in range(chatlog.size()):
-		result += chatlog[i]._to_string()
+	for message in chatlog:
+		result += "%s [%s:%s:%s] : %s" % [message.sender, 
+		message.time.hour, 
+		message.time.minute, 
+		message.time.second, 
+		message.contents]
 		result += "\n"
 	return result
 
@@ -78,10 +83,14 @@ class Message:
 		self.contents = contents
 	func _to_string() -> String:
 		# return "hello"
-		return "%s: %s" % [self.sender, self.contents]
+		return "%s [%s:%s:%s] : %s" % [self.sender, 
+		self.time.hour, 
+		self.time.minute, 
+		self.time.second, 
+		self.contents]
 		
 remote func _update_chat_log(chat_log):
-	print(chat_log)
+	# print(chat_log)
 	# print("Updating chat log: %s" % pprint(chat_log))
 	# puppet_chat_log = chat_log
 	puppet_chat_log = chat_log
@@ -97,4 +106,4 @@ func _process(_delta):
 		# print(get_tree().multiplayer.is_object_decoding_allowed()) # True
 		chat_log = puppet_chat_log
 		if $ChatRoom/ChatDisplay != null:
-			$ChatRoom/ChatDisplay.text = print(chat_log)
+				$ChatRoom/ChatDisplay.text = pprint(chat_log)

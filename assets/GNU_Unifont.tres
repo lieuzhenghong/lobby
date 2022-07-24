@@ -3,5 +3,5 @@
 [ext_resource path="res://assets/unifont-14.0.04.otf" type="DynamicFontData" id=1]
 
 [resource]
-size = 64
+size = 48
 font_data = ExtResource( 1 )
