@@ -53,9 +53,9 @@ remote func register_player(info):
 	print("Player ID %s name %s info updated" % [id, player_info[id].name])
 	
 remote func create_message(contents: String):
-	print("create_message received %s" % contents)
+	print("create_message received. Message: %s" % contents)
 	var id = get_tree().get_rpc_sender_id()
-	print("New message from %s" % id)
+	print("New message from ID %s" % id)
 	var message = Message.new(
 		player_info[id].name,
 		contents
@@ -65,8 +65,6 @@ remote func create_message(contents: String):
 	# chat_log.push_back(message._to_string())
 	# chat_log.push_back("message")
 	print("New chat log (length %s)" % chat_log.size())
-	pprint(chat_log)
-	# chat_log.push_back("Message")
 	
 func pprint(chat_log):
 	var result = ""
