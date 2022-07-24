@@ -61,8 +61,16 @@ remote func create_message(contents: String):
 	)
 	chat_log.push_back(message.to_string())
 	print("New chat log:")
-	print(chat_log)
+	pprint(chat_log)
 	return message	
+	
+func pprint(chat_log):
+	var result = ""
+	for message in chat_log:
+		result += message._to_string()
+		result += "\n"
+	print(result)
+	return(result)
 
 class Message:
 	var sender
@@ -87,5 +95,4 @@ func _update(_delta):
 		rpc("_update_chat_log", chat_log)
 	else:
 		chat_log = puppet_chat_log
-		print(chat_log)
-		$ChatRoom/ChatDisplay.text = chat_log
+		$ChatRoom/ChatDisplay.text = pprint(chat_log)
