@@ -63,7 +63,8 @@ remote func create_message(contents: String):
 	print("Message content: %s" % message._to_string())
 	chat_log.push_back(message._to_string())
 	print("New chat log (length %s)" % chat_log.size())
-	print(chat_log[0]._to_string())
+	var first_message: Message = chat_log[0]
+	print(first_message._to_string())
 	pprint(chat_log)
 	return message	
 	
