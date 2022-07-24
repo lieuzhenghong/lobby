@@ -85,3 +85,4 @@ func _update(_delta):
 		rpc("_update_chat_log", chat_log)
 	else:
 		chat_log = puppet_chat_log
+		$ChatRoom/ChatDisplay.text = chat_log
