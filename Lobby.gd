@@ -2,20 +2,29 @@
 
 extends Node
 
+var server
+var client
+
 func _ready():
-	var peer = NetworkedMultiplayerENet.new()
 	var SERVER_IP = "128.199.217.36"
 	var SERVER_PORT = 4321
 	var MAX_PLAYERS = 8
 
 	if OS.has_feature("Server") or "--server" in OS.get_cmdline_args():
-		peer.create_server(SERVER_PORT, MAX_PLAYERS)
+		server = WebSocketServer.new()
+		# peer.create_server(SERVER_PORT, MAX_PLAYERS)
+		server.listen(SERVER_PORT, PoolStringArray(), true);
+		get_tree().set_network_peer(server);
 	else:
 		print("I am not a server")
-		peer.create_client(SERVER_IP, SERVER_PORT)
+		client = WebSocketClient.new()
+		# peer.create_client(SERVER_IP, SERVER_PORT)
+		var url = "ws://%s:%s" % [SERVER_IP, str(SERVER_PORT)]
+		var error = client.connect_to_url(url, PoolStringArray(), true);
+		get_tree().set_network_peer(client);
 		get_tree().multiplayer.set_allow_object_decoding(true)
 
-	get_tree().network_peer = peer
+	# get_tree().network_peer = peer
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
@@ -100,14 +109,18 @@ func _on_SendMessageButton_pressed():
 	
 func _process(_delta):
 	if get_tree().is_network_server():
-		rpc("_update_chat_log", chat_log)
+		if server.is_listening():
+			server.poll()
+			rpc("_update_chat_log", chat_log)
 	else:
 		# print(get_tree().multiplayer.is_object_decoding_allowed()) # True
-		chat_log = puppet_chat_log
-		if $ChatRoom/ChatDisplay != null:
-			$ChatRoom/ChatDisplay.text = pprint(chat_log)
-		if $ChatRoom/NameLabel != null:
-			$ChatRoom/NameLabel.text = my_info.name
+		if (client.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED || client.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING):
+			client.poll()
+			chat_log = puppet_chat_log
+			if $ChatRoom/ChatDisplay != null:
+				$ChatRoom/ChatDisplay.text = pprint(chat_log)
+			if $ChatRoom/NameLabel != null:
+				$ChatRoom/NameLabel.text = my_info.name
 
 func _on_ChangeNameButton_pressed():
 	my_info.name = $ChatRoom/ChangeNameInput.text
